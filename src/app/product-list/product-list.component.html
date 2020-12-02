@@ -1,0 +1,37 @@
+<div class="header-section">
+  <h1 class="">Greeating from ShopeBridge</h1>
+</div>
+<div class="row add-product">
+  <div *ngIf="listCount">
+    <button class="btn btn-primary" (click)="AddProduct()">
+      <mat-icon>add</mat-icon> Add Product
+    </button>
+  </div>
+  <div *ngIf !="listCount">
+    <button class="btn btn-secondary" (click)="AddProduct()">
+      <mat-icon>add</mat-icon> Add Product
+    </button>
+  </div>
+</div>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Product Name</th>
+      <th scope="col">Product Description</th>
+      <th scope="col">Product Price</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of productList">
+      <td>{{item.productName}}</td>
+      <td>{{item.productDescription}}</td>
+      <td>{{item.productPrice}}</td>
+      <td>
+        <mat-icon (click)="popupHandler(item.productId)">edit</mat-icon>
+        <mat-icon (click)="deleteHandler(item.productId)">delete</mat-icon>
+      </td>
+    </tr>
+  </tbody>
+</table>
