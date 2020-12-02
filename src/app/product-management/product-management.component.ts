@@ -1,5 +1,5 @@
 import { Component, DebugNode, OnChanges, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ProductServiceService } from '../product-service.service';
 import { Product } from '../Model/product-model';
 
@@ -15,7 +15,8 @@ export class ProductManagementComponent implements OnInit, OnChanges {
   selectedImage: any;
   ProductSaveJson: {};
   constructor(private route: ActivatedRoute,
-    private productServiceobj: ProductServiceService) {
+    private productServiceobj: ProductServiceService,
+    private routes: Router) {
   }
 
   ngOnInit(): void {
@@ -67,11 +68,32 @@ export class ProductManagementComponent implements OnInit, OnChanges {
   saveProduct(productModalData: any) {
     this.productServiceobj.saveProduct(productModalData).subscribe(res => {
       console.log(res + 'in UpdateProduct ');
+      if (res === 'success') {
+        this.routes.navigate(['/product-list']).then((e) => {
+          if (e) {
+            console.log('Navigation is successful!');
+          }
+        });
+      }
     });
   }
   UpdateProduct(productModalData: any) {
     this.productServiceobj.UpdatePrduct(productModalData).subscribe(data => {
       console.log(data + 'in UpdateProduct ');
+      if (data === 'success') {
+        this.routes.navigate(['/product-list']).then((e) => {
+          if (e) {
+            console.log('Navigation is successful!');
+          }
+        });
+      }
+    });
+  }
+  gotoHomePage() {
+    this.routes.navigate(['/product-list']).then((e) => {
+      if (e) {
+        console.log('Navigation is successful!');
+      }
     });
   }
 }

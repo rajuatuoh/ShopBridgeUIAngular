@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Product } from '../Model/product-model';
 import { ProductServiceService } from '../product-service.service';
-
+import { ToastrService } from 'ngx-toastr';
+import { MytoasterService } from '../mytoaster.service';
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
@@ -14,7 +15,8 @@ export class ProductListComponent implements OnInit {
   listCount: number;
 
   constructor(private productServiceObj: ProductServiceService,
-    private route: Router) {
+    private route: Router,
+    private myToasterService: MytoasterService) {
   }
 
   ngOnInit(): void {
@@ -29,6 +31,9 @@ export class ProductListComponent implements OnInit {
       this.productList = data;
       this.listCount = this.productList.length;
       console.log('data:' + this.productList);
+      this.myToasterService.notifySuccessMsg(
+        'list Retrived'
+      );
 
     },
       (error) => {
@@ -65,6 +70,10 @@ export class ProductListComponent implements OnInit {
   }
 
   deleteHandler(productId: number) {
-
+    this.productServiceObj.DeleteProduct(productId).subscribe(res => {
+      if (res == 'success') {
+        this.colledService();
+      }
+    })
   }
 }

@@ -2,12 +2,12 @@
   <h1 class="">Greeating from ShopeBridge</h1>
 </div>
 <div class="row add-product">
-  <div *ngIf="listCount">
+  <div *ngIf="listCount !==0">
     <button class="btn btn-primary" (click)="AddProduct()">
       <mat-icon>add</mat-icon> Add Product
     </button>
   </div>
-  <div *ngIf !="listCount">
+  <div *ngIf="listCount === 0">
     <button class="btn btn-secondary" (click)="AddProduct()">
       <mat-icon>add</mat-icon> Add Product
     </button>
@@ -30,6 +30,7 @@
       <td>{{item.productPrice}}</td>
       <td>
         <mat-icon (click)="popupHandler(item.productId)">edit</mat-icon>
+        &nbsp;
         <mat-icon (click)="deleteHandler(item.productId)">delete</mat-icon>
       </td>
     </tr>

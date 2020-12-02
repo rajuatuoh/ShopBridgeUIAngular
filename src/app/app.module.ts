@@ -8,6 +8,10 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
 import { ProductManagementComponent } from './product-management/product-management.component';
 import { FormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+import { MytoasterService } from './mytoaster.service';
+
 
 @NgModule({
   declarations: [
@@ -22,8 +26,12 @@ import { FormsModule } from '@angular/forms';
     NoopAnimationsModule,
     MatIconModule,
     FormsModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot()
+
+
   ],
-  providers: [],
+  providers: [MytoasterService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

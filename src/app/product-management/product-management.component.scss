@@ -5,6 +5,18 @@
     background-position: center;
     background-image : url("../../assets/Images/Inventory-background.png");
    }
-   card{
-     width: 40%
+   .card{
+    padding: 24px;
+    height: 412px;
+    background-color: aliceblue;
+    opacity: 0.7;
+    color: initial;
+    font-weight: 500;
+   }
+   h1{
+    font-size: xxx-large;
+    color: antiquewhite;
+    height: 160px;
+    text-align: center;
+    padding: 82px;
    }
