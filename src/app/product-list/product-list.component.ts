@@ -4,6 +4,7 @@ import { Product } from '../Model/product-model';
 import { ProductServiceService } from '../product-service.service';
 import { ToastrService } from 'ngx-toastr';
 import { MytoasterService } from '../mytoaster.service';
+import { NotificationServicesService } from '../notification-services.service';
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
@@ -16,7 +17,7 @@ export class ProductListComponent implements OnInit {
 
   constructor(private productServiceObj: ProductServiceService,
     private route: Router,
-    private myToasterService: MytoasterService) {
+    private notifyUser: NotificationServicesService) {
   }
 
   ngOnInit(): void {
@@ -31,13 +32,12 @@ export class ProductListComponent implements OnInit {
       this.productList = data;
       this.listCount = this.productList.length;
       console.log('data:' + this.productList);
-      this.myToasterService.notifySuccessMsg(
-        'list Retrived'
-      );
-
+      if (this.listCount === 0) {
+        this.notifyUser.forINfo('Info !', 'Product Not Found');
+      }
     },
       (error) => {
-        console.log('Error is fetching all ProductList: ' + error);
+        this.notifyUser.onError('Error', 'Connection Fail');
       }
     );
   }
@@ -66,14 +66,17 @@ export class ProductListComponent implements OnInit {
         console.log('Navigation is successful!');
       }
     });
-    console.log("Create the product");
   }
 
   deleteHandler(productId: number) {
     this.productServiceObj.DeleteProduct(productId).subscribe(res => {
-      if (res == 'success') {
+      if (res === 'success') {
+        this.notifyUser.onSuccess('Success', 'Product Deleted');
         this.colledService();
       }
-    })
+    },
+      (error) => {
+        this.notifyUser.onError('Fail', 'Dependent Product');
+      });
   }
 }

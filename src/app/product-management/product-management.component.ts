@@ -2,6 +2,7 @@ import { Component, DebugNode, OnChanges, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductServiceService } from '../product-service.service';
 import { Product } from '../Model/product-model';
+import { NotificationServicesService } from '../notification-services.service';
 
 @Component({
   selector: 'app-product-management',
@@ -16,7 +17,8 @@ export class ProductManagementComponent implements OnInit, OnChanges {
   ProductSaveJson: {};
   constructor(private route: ActivatedRoute,
     private productServiceobj: ProductServiceService,
-    private routes: Router) {
+    private routes: Router,
+    private notifyUser: NotificationServicesService) {
   }
 
   ngOnInit(): void {
@@ -35,6 +37,27 @@ export class ProductManagementComponent implements OnInit, OnChanges {
   ngOnChanges(): void {
   }
   saveHandler() {
+    if (!this.productModel.productName) {
+      this.notifyUser.forAlert('Alert', 'Product Name can\'t be empty');
+      return false;
+    }
+    else if (!this.productModel.productDescription) {
+      this.notifyUser.forAlert('Alert', 'Product Desc Name can\'t be empty');
+      return false;
+    }
+    else if (!this.productModel.productPrice) {
+      this.notifyUser.forAlert('Alert', 'please provide the price');
+      return false;
+    }
+    else if (!this.productModel.productImg) {
+      this.notifyUser.forAlert('Alert', 'Chosse an image');
+      return false;
+    } else if (isNaN(this.productModel.productPrice)) {
+      this.notifyUser.onWarning('Alert', 'Price Should be number');
+      this.productModel.productPrice = null;
+      return false;
+
+    }
     this.ProductSaveJson = {
       productName: this.productModel.productName,
       productDescription: this.productModel.productDescription,
@@ -69,12 +92,13 @@ export class ProductManagementComponent implements OnInit, OnChanges {
     this.productServiceobj.saveProduct(productModalData).subscribe(res => {
       console.log(res + 'in UpdateProduct ');
       if (res === 'success') {
-        this.routes.navigate(['/product-list']).then((e) => {
-          if (e) {
-            console.log('Navigation is successful!');
-          }
-        });
+
+        this.routes.navigate(['/product-list']);
+        this.notifyUser.onSuccess('Success', 'Created SuccessFully');
       }
+    }, (error) => {
+      this.routes.navigate(['/product-list']);
+      this.notifyUser.onError('Fail', 'Try again');
     });
   }
   UpdateProduct(productModalData: any) {
@@ -86,7 +110,10 @@ export class ProductManagementComponent implements OnInit, OnChanges {
             console.log('Navigation is successful!');
           }
         });
+        this.notifyUser.onSuccess('Success', 'Product Updated');
       }
+    }, (error) => {
+      this.notifyUser.onError('Fail', 'Try Again');
     });
   }
   gotoHomePage() {
